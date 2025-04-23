@@ -7,19 +7,22 @@ module.exports = (sequelize, Sequelize) => {
             autoIncrement: true,
             primaryKey: true
         },
-        nombre: {
-            type: Sequelize.STRING(100)
+        nombres: {
+            type: Sequelize.STRING(20)
+        },
+        apellidos: {
+            type: Sequelize.STRING(20)
         },
         dpi: {
-            type: Sequelize.STRING(20),
+            type: Sequelize.INTEGER,
             unique: true,
             allowNull: false
         },
         nit: {
-            type: Sequelize.STRING(20)
+            type: Sequelize.INTEGER
         },
         recibo_luz: {
-            type: Sequelize.TEXT
+            type: Sequelize.STRING(20)
         },
         beneficiario: {
             type: Sequelize.STRING(100)
