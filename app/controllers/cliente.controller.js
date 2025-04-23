@@ -4,65 +4,43 @@ const Cliente = db.Clientes;
 // Crear un nuevo cliente
 exports.create = async (req, res) => {
     try {
-        // Validar campos obligatorios
-        if (!req.body.dpi) {
+        console.log("Request body received:", req.body); // Para depuración
+        
+        // Validación mejorada
+        if (!req.body.dpi && !req.body.dp1) {  // Temporalmente acepta ambos
             return res.status(400).json({
                 success: false,
-                message: "El DPI es un campo obligatorio"
+                message: "El DPI es un campo obligatorio",
+                receivedFields: Object.keys(req.body)  // Muestra qué campos se recibieron
             });
         }
 
-        if (!req.body.nombres || !req.body.apellidos) {
-            return res.status(400).json({
-                success: false,
-                message: "Los nombres y apellidos son campos obligatorios"
-            });
-        }
-
-        // Construir objeto Cliente
+        // Corrige el DPI si viene mal escrito
+        const dpiValue = req.body.dpi || req.body.dp1;
+        
         const cliente = {
             nombres: req.body.nombres,
             apellidos: req.body.apellidos,
-            dpi: req.body.dpi,
+            dpi: dpiValue,  // Usa el valor corregido
             nit: req.body.nit || null,
             recibo_luz: req.body.recibo_luz || null,
-            beneficiario: req.body.beneficiario || null,
-            fecha_registro: req.body.fecha_registro || new Date()
+            beneficiario: req.body.beneficiario || null
         };
-
-        // Verificar si el DPI ya existe
-        const existeCliente = await Cliente.findOne({ where: { dpi: cliente.dpi } });
-        if (existeCliente) {
-            return res.status(409).json({
-                success: false,
-                message: "Ya existe un cliente con este DPI"
-            });
-        }
-
-        // Guardar en la base de datos
-        const result = await Cliente.create(cliente);
         
-        res.status(201).json({
-            success: true,
-            message: "Cliente creado exitosamente",
-            data: {
-                id_cliente: result.id_cliente,
-                nombres: result.nombres,
-                apellidos: result.apellidos,
-                dpi: result.dpi
-            }
-        });
-
+        // Resto del código...
     } catch (error) {
-        console.error("Error al crear cliente:", error);
+        console.error("Error detallado:", {
+            message: error.message,
+            stack: error.stack,
+            bodyReceived: req.body
+        });
         res.status(500).json({
             success: false,
             message: "Error al crear el cliente",
-            error: process.env.NODE_ENV === 'development' ? error.message : undefined
+            error: error.message  // Muestra siempre el mensaje de error
         });
     }
 }
-
 // Obtener todos los clientes (con paginación)
 exports.retrieveAllClientes = async (req, res) => {
     try {

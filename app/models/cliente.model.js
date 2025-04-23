@@ -13,8 +13,9 @@ module.exports = (sequelize, Sequelize) => {
         apellidos: {
             type: Sequelize.STRING(20)
         },
+        // En cliente.model.js
         dpi: {
-            type: Sequelize.INTEGER,
+            type: Sequelize.BIGINT,  // Cambiado de INTEGER a BIGINT
             unique: true,
             allowNull: false
         },
