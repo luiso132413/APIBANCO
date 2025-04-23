@@ -1,5 +1,5 @@
-const express = require('express');
-const router = express.Router();
+let express = require('express');
+let router = express.Router();
 
 // Importar controladores
 const cliente = require('../controllers/cliente.controller.js');
@@ -43,4 +43,5 @@ router.get('/api/transaccion/byoperador/:operador', transaccion.getTransacciones
 router.put('/api/transaccion/update/:id', transaccion.updateById);
 router.put('/api/transaccion/validar/:id', transaccion.validarTransaccion);
 router.delete('/api/transaccion/delete/:id', transaccion.deleteById);
+
 module.exports = router;
