@@ -1,18 +1,9 @@
-const { password } = require("../config/env");
-
 module.exports = (sequelize, Sequelize) => {
-    const Movimiento = sequelize.define('movimiento', {    
+    const Movimiento = sequelize.define('movimiento', {
         id_movimiento: {
             type: Sequelize.INTEGER,
             autoIncrement: true,
             primaryKey: true
-        },
-        id_cuenta: {
-            type: Sequelize.INTEGER,
-            references: {
-                model: 'cuenta',
-                key: 'id_cuenta'
-            }
         },
         fecha: {
             type: Sequelize.DATE,
@@ -26,10 +17,12 @@ module.exports = (sequelize, Sequelize) => {
                 'Retiro Cheque', 
                 'Cambio de Moneda', 
                 'Pago de Servicio'
-            )
+            ),
+            allowNull: false
         },
         monto: {
-            type: Sequelize.DECIMAL(12,2)
+            type: Sequelize.DECIMAL(12, 2),
+            allowNull: false
         },
         descripcion: {
             type: Sequelize.TEXT
@@ -43,6 +36,6 @@ module.exports = (sequelize, Sequelize) => {
             defaultValue: false
         }
     });
-    
+
     return Movimiento;
-}
+};
